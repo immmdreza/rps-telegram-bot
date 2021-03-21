@@ -1,9 +1,11 @@
-from db_contexts.rpsbot_context import RpsDb
+from db_contexts.rpsbot_context import rps_db
 from models.user import User
 
-db = RpsDb()
+# ed_user = User(name='Ed Jones', username='edsnickname', lang_code = "fa")
+# rps_db.Session.add(ed_user)
 
-ed_user = User(name='Ed Jones', username='edsnickname', lang_code = "fa")
-db.session.add(ed_user)
+# rps_db.commit()
 
-db.session.commit()
+our_user = rps_db.Session.query(User).filter_by(name='Ed Jones').first()
+
+print(our_user.username)
