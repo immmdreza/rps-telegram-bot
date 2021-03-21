@@ -1,0 +1,6 @@
+.env
+*.session
+*.session-journal
+rps-bot/
+.vscode/
+__pycache__/
