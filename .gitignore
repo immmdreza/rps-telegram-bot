@@ -4,3 +4,4 @@
 rps-bot/
 .vscode/
 __pycache__/
+*.db
