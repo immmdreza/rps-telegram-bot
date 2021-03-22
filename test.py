@@ -1,11 +1,12 @@
-from db_contexts.rpsbot_context import rps_db
+from db_methods.users import UsersJobs
 from models.user import User
 
-# ed_user = User(name='Ed Jones', username='edsnickname', lang_code = "fa")
-# rps_db.Session.add(ed_user)
 
-# rps_db.commit()
+with UsersJobs() as uj:
+    if not uj.exists(123456):
+        uj.insert_user(User(123456, "AraSH"))
 
-our_user = rps_db.Session.query(User).filter_by(name='Ed Jones').first()
-
-print(our_user.username)
+        user = uj.get_user(123456)
+        print(user.name)
+    else:
+        uj.delete_user(123456)
