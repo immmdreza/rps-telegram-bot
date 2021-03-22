@@ -19,8 +19,7 @@ class User(Base):
         self.lang_code = lang_code
 
     def __repr__(self):
-       return (
-           "<User(name='{}' ({}), username='{}', lang code='{}')>".format(
+        return "<User(name='{}' ({}), username='{}', lang code='{}')>".format(
             self.name,
             self.telegram_id,
             self.username,

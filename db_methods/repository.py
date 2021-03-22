@@ -3,8 +3,13 @@ from abc import ABC
 
 
 class Repository(ABC):
-    def __init__(self, context: DbContext):
+    def __init__(self, context: DbContext, entity):
         self.__context = context
+        self.__entity = entity
+
+    @property
+    def query(self):
+        return self.session.query(self.__entity)
 
     def commit(self):
         return self.session.commit()
