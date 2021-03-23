@@ -35,3 +35,31 @@ async def new_match(event: Message):
             )
         )
         await event.reply('Match created!', buttons=button)
+
+
+@events.register(
+    events.NewMessage(
+        incoming=True, func=lambda e: e.is_private, pattern='^/start join_'))
+async def join_match(event: Message):
+    splited = event.raw_text.split('=')[-1].split('_')
+    group_id = int(splited[1])
+    match_id = splited[2]
+    with GroupMatchJobs() as gmj:
+        group = gmj.get_match_secure(match_id, group_id)
+        if group:
+            if not group.finished and not group.started:
+                match = RPS_CORE.GetMatch(group.match_id)
+                if match:
+                    if match.AddPlayer(event.sender_id):
+                        await event.reply('Joined!')
+                        await event.client.send_message(
+                            group_id,
+                            "[{}](tg://user?id={}) Joined!".format(
+                                event.sender.first_name,
+                                event.sender_id
+                            )
+                        )
+                else:
+                    gmj.remove_match(match_id)
+            else:
+                await event.reply('Match is finished or started already!')

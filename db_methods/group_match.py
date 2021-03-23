@@ -8,9 +8,13 @@ class GroupMatchJobs(Repository):
     def __init__(self):
         super().__init__(rps_db, GroupMatch)
 
-    def get_match(self, match_id: str):
+    def get_match(self, match_id: str) -> GroupMatch:
         return self.query.filter_by(
             match_id=match_id).first()
+
+    def get_match_secure(self, match_id: str, group_id: int) -> GroupMatch:
+        return self.query.filter_by(
+            match_id=match_id, group_id=group_id).first()
 
     def has_unfinished_match(self, group_id: int):
         return self.query.filter_by(
