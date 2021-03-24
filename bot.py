@@ -1,15 +1,18 @@
 from telethon import TelegramClient
+from dotenv import load_dotenv
+from event_handlers import handlers
+import os
+from scheduler import main_scheduler
 import logging
-logging.basicConfig(format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
-                    level=logging.WARNING)
+logging.basicConfig(
+    format='[%(levelname) 5s/%(asctime)s] %(name)s: %(message)s',
+    level=logging.WARNING)
 
 
 def main():
-    from dotenv import load_dotenv
     # loading from .env (see .env.example)
     load_dotenv()
 
-    import os
     # Use your own values from my.telegram.org
     api_id = os.getenv('API_ID')
     api_hash = os.getenv('API_HASH')
@@ -21,7 +24,7 @@ def main():
     bot = TelegramClient('bot', api_id, api_hash).start(bot_token=bot_token)
 
     print(":: Setting up event handlers ::")
-    from event_handlers import handlers
+
     # all handles should be stored in event_handler folder
     # then appened to handlers list in __init__.py
     added_handler = 0
@@ -32,6 +35,9 @@ def main():
 
     if added_handler == 0:
         print("╚ :: No handler added!! ::")
+
+    print(":: Starting main scheduler ::")
+    main_scheduler.start()
 
     print(":: Running forever!! ::")
     bot.run_until_disconnected()

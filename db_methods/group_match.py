@@ -1,12 +1,16 @@
 from db_contexts.rpsbot_context import rps_db
 from models.match import GroupMatch
-from .repository import Repository
+from db_methods.repository import Repository
 from datetime import datetime
 
 
 class GroupMatchJobs(Repository):
     def __init__(self):
         super().__init__(rps_db, GroupMatch)
+
+    def started(self, match: GroupMatch):
+        match.started = True
+        self.commit()
 
     def get_match(self, match_id: str) -> GroupMatch:
         return self.query.filter_by(

@@ -1,3 +1,8 @@
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import reconstructor
 
-Base = declarative_base()
+
+class EntityBase:
+
+    @reconstructor
+    def init_on_load(self):
+        self.__repository = None
