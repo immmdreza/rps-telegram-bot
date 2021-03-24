@@ -39,7 +39,7 @@ async def new_match(event: Message):
                 bot_username, event.chat_id, match_id
             )
         )
-        await event.reply(' _Match created!_', buttons=button)
+        await event.reply(' __Match created!__', buttons=button)
 
 
 @events.register(
@@ -56,7 +56,7 @@ async def join_match(event: Message):
                 match = RPS_CORE.GetMatch(group.match_id)
                 if match:
                     if match.AddPlayer(event.sender_id):
-                        await event.reply('*Joined!*')
+                        await event.reply('**Joined!**')
                         await event.client.send_message(
                             group_id,
                             "[{}](tg://user?id={}) Joined!".format(
@@ -67,7 +67,7 @@ async def join_match(event: Message):
                 else:
                     gmj.remove_match(match_id)
             else:
-                await event.reply('_Match is finished or started already!_')
+                await event.reply('__Match is finished or started already!__')
 
 
 @events.register(
@@ -88,8 +88,8 @@ async def start_match(event: Message):
     with GroupMatchJobs() as gmj:
         match = gmj.unfinished_match(event.chat_id)
         if match:
-            if not match.started:
-                if RPS_CORE.GetMatch(match.match_id):
+            if RPS_CORE.GetMatch(match.match_id):
+                if not match.started:
                     context = MatchContext(
                         event.client,
                         event.chat_id,
@@ -102,21 +102,23 @@ async def start_match(event: Message):
                     gmj.started(match)
                     await event.reply(
                         'Match Started!\n\n'
-                        + '_Total round_: `{}`, _Round timeout_: `{}`'.format(
+                        + '__Total round__: `{}`, __Round timeout__: `{}`'
+                        .format(
                             round_count,
                             round_duration
                         )
                     )
                 else:
-                    gmj.remove_match(match)
-                    await event.reply(
-                        'No match found\n_Start a new match with /newmatch._')
-                    return
+                    await event.reply('Match already started!!')
             else:
-                await event.reply('Match already started!!')
+                gmj.remove_match(match)
+                await event.reply(
+                    'No match found\n__Start a new match with /newmatch.__'
+                    )
+                return
         else:
             await event.reply(
-                'No match found\n_Start a new match with /newmatch._')
+                'No match found\n__Start a new match with /newmatch.__')
 
 
 @events.register(
@@ -133,4 +135,4 @@ async def card_choosed(event):
     if match_context:
         if match_context.card_selected(event.sender.id, card):
             await event.answer("Selected!")
-            await event.edit(f"_{card}_ Selected!")
+            await event.edit(f"__{card}__ Selected!")
